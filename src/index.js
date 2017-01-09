@@ -15,24 +15,42 @@ class CommentContainer extends React.Component {
 
     ]
   };
+
+
 };
+
+//add a new comment
+	addComment(name, text) {
+	  const comment = {
+	    name,
+	    text
+	  };
+
+	  this.setState({'comments': this.state.comments.concat([comment])});
+
+	  console.log('addComent -> CommentContainer');
+	}
+
 
 //create a new comment using the map function to generate a comment
-getComments() {
-  return this.state.comments.map((comment) => {
-    return (
-    	//new instance of comment
-      <Comment
-        name={comment.name} text={comment.text}
-        key={this.state.comments.indexOf(comment)} />
-    )
-  });
-}
+	getComments() {
+
+	        console.log('getComments -> CommentContainer');
+	  return this.state.comments.map((comment) => {
+	    return (
+	    	//new instance of comment
+	      <Comment
+	        name={comment.name} text={comment.text}
+	        key={this.state.comments.indexOf(comment)} />
+
+	    )
+	  });
+	}
 
 //display the number of comments on the page
-commentCount() {
-    return this.state.comments.length;
-};
+	commentCount() {
+	    return this.state.comments.length;
+	};
 
 //inside the render invoke the getComments function
   render() {
@@ -47,11 +65,12 @@ commentCount() {
 
 		      </div>
 
-		      <CommentForm/>
+		      <CommentForm addComment={this.addComment.bind(this)} />
 
 		   </div>
     )
   }
+
  }
 
 
@@ -73,25 +92,30 @@ class Comment extends React.Component {
 
 class CommentForm extends React.Component {
 
-	handleSubmit() {
+	handleSubmit(e) {
+		e.preventDefault();
 	  let name = this.name;
 	  let text = this.text;
 	  this.props.addComment(name.value, text.value);
+
+	  console.log('handleSubmit -> CommentForm');
 	}
 
   render() {
   	return(
-  		<form className="form-group" onSubmit={this.handleSubmit.bind(this)}>
-      <h3>Add a new post</h3>
-      <div className="form-group">
-        <input type="text" className="form-control" placeholder="Comment"></input>
-      </div>
-      <div className="form-group">
-        <input type="text" className="form-control" placeholder="Name"></input>
-      </div>
-      <button type="submit" className="btn btn-primary">Add Comment</button>
-    </form>
-  	)
+		  <form className="form-group" onSubmit={this.handleSubmit.bind(this)}>
+		    <h3>Add a new post</h3>
+		    <div className="form-group">
+		      <input type="text" className="form-control" placeholder="Comment"
+		        ref={(input) => this.text = input}></input>
+		    </div>
+		    <div className="form-group">
+		      <input type="text" className="form-control" placeholder="Name"
+		        ref={(input) => this.name = input}></input>
+		    </div>
+		    <button type="submit" className="btn btn-primary">Add Comment</button>
+		  </form>
+		)
   }
 }
 
